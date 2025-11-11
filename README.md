@@ -1,4 +1,4 @@
-# telegram-bot-for-ice-cream-shop
+# telegram-bot-collection-of-quotes
 
 # Для старта работы необходимо скопировать файл settings/.envs/.env.local.template в файл settings/.envs/.env и заполнить его своими данными.
 
