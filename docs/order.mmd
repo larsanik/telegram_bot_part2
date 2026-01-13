@@ -1,14 +1,12 @@
 sequenceDiagram
     actor U as User
     participant B as Bot
-    actor W as Admin
+    actor W as Waiter
     U->>B: start
     B->>U: Приветствует
-    loop Запрос цитаты
-        U->>B: Запрашивает цитату
-        B->>U: Уточняет из каого фильма нужна цитата
-        !!!!!!!!!!!!!!!
-
+    loop Оформление заказа
+        U->>B: Добавляет товар в заказ
+        B->>U: Показывает корзину
     end
     U->>B: Подтверждает заказ
     B->>W: Сообщает о заказе
