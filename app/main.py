@@ -1,10 +1,12 @@
 import logging
 
+from psycopg2._psycopg import cursor
 from telegram.ext import Application as PTBApplication, ApplicationBuilder
 
 from app.handlers import HANDLERS
 
 from settings.config import AppSettings
+
 
 class Application(PTBApplication):
     def __init__(self, app_settings: AppSettings, **kwargs):
