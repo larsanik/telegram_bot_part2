@@ -39,8 +39,10 @@ def configure_logging():
 
 
 def create_app(app_settings: AppSettings) -> Application:
-    application = ApplicationBuilder().application_class(Application, kwargs={"app_settings": app_settings}).token(
-        app_settings.TELEGRAM_API_KEY.get_secret_value()).build()
+    application = (ApplicationBuilder().application_class(Application, kwargs={"app_settings": app_settings})
+                    .post_init(Application.initialize_dependencies). # type: ignore[arg-type]
+                    post_shutdown(Application.shutdown_dependencies) # type: ignore[arg-type]
+                   .token(app_settings.TELEGRAM_API_KEY.get_secret_value()).build())
     return application
 
 
