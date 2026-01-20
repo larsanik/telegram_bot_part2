@@ -1,7 +1,10 @@
 import logging
 
+from poetry.console.commands import self
 from telegram.ext import Application as PTBApplication, ApplicationBuilder
 
+from app.core.users.repositories import UserRepository
+from app.core.users.services import UserService
 from app.handlers import HANDLERS
 from app.infra.postgres.db import Database
 from settings.config import AppSettings
@@ -13,6 +16,9 @@ class Application(PTBApplication):
         self._settings = app_settings
         self._handlers_handlers()
         self.database = Database(app_settings.POSTGRES_DSN)
+
+        user_repository = UserRepository(database=self.database)
+        self.user_service = UserService(repository=user_repository)
 
     def _handlers_handlers(self):
         for handler in HANDLERS:
