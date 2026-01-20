@@ -1,10 +1,9 @@
 import logging
 
-from psycopg2._psycopg import cursor
 from telegram.ext import Application as PTBApplication, ApplicationBuilder
 
 from app.handlers import HANDLERS
-
+from app.infra.postgres.db import Database
 from settings.config import AppSettings
 
 
@@ -13,11 +12,19 @@ class Application(PTBApplication):
         super().__init__(**kwargs)
         self._settings = app_settings
         self._handlers_handlers()
+        self.database = Database(app_settings.POSTGRES_DSN)
 
     def _handlers_handlers(self):
         for handler in HANDLERS:
             self.add_handler(handler)
 
+    @staticmethod
+    async def initialize_dependencies(application: "Application") -> None:
+        await application.database.initialize()
+
+    @staticmethod
+    async def shutdown_dependencies(application: "Application") -> None:
+        await application.database.shutdown()
 
     def run(self) -> None:
         self.run_polling()
