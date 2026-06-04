@@ -11,4 +11,4 @@ class AppSettings(BaseSettings):
     LOG_LEVEL: str = "INFO"
 
     POSTGRES_DSN: Secret[PostgresDsn] = Secret(
-        PostgresDsn("postgresql://postgres:1@localhost:5432/ice_cream"))
+        PostgresDsn("postgresql+asyncpg://postgres:1@localhost:5432/ice_cream"))
