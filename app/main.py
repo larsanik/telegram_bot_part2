@@ -1,6 +1,6 @@
 import logging
 
-from poetry.console.commands import self
+# from poetry.console.commands import self
 from telegram.ext import Application as PTBApplication, ApplicationBuilder
 
 from app.core.users.repositories import UserRepository
