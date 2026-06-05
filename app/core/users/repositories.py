@@ -1,9 +1,11 @@
 from dataclasses import dataclass
 
-from app.infra.postgres.db import Database
+from sqlalchemy import select
+from sqlalchemy.dialects.postgresql import insert
 
 from app.core.users.models import User
-from sqlalchemy.dialects.postgresql import insert
+from app.infra.postgres.db import Database
+
 
 @dataclass
 class UserRepository:
@@ -14,3 +16,8 @@ class UserRepository:
             insert_stmt = insert(User).values(id=user_id, is_waiter=is_waiter).on_conflict_do_nothing()
             await conn.execute(insert_stmt)
             await conn.commit()
+
+    async def get_waiter_user_ids(self) -> list[int]:
+        async with self.database.session() as session:
+            query = select(User.id).where(User.is_waiter == True)
+            return list(await session.scalars(query))

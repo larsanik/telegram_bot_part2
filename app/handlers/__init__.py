@@ -1,7 +1,19 @@
-from telegram.ext import BaseHandler, CommandHandler
-from app.handlers.commands import start, stop
+from dataclasses import dataclass
 
-HANDLERS: tuple[BaseHandler, ...] = (
-    CommandHandler('start', start),
-    CommandHandler('stop', stop), # todo убрать - это прикол
+from telegram.ext import BaseHandler, CommandHandler
+
+from app.core.users.constants import RolesEnum
+from app.handlers.commands import start, waiter_start, stop
+
+
+@dataclass
+class Handler:
+    handler: BaseHandler
+    role: RolesEnum | None = None
+
+
+HANDLERS: tuple[Handler, ...] = (
+    Handler(handler=CommandHandler('start', waiter_start), role=RolesEnum.waiter),
+    Handler(handler=CommandHandler('start', start)),
+    Handler(handler=CommandHandler('stop', stop)) # todo убрать - это прикол
 )
