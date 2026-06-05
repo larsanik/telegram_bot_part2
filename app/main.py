@@ -8,6 +8,7 @@ from app.core.users.services import UserService
 from app.handlers import HANDLERS
 from app.infra.postgres.base import Base
 from app.infra.postgres.db import Database
+from app.jobs.sync_roles import sync_roles
 from settings.config import AppSettings
 from ptbcontrib.roles import setup_roles, RolesHandler
 
@@ -39,11 +40,17 @@ class Application(PTBApplication):
             for user_id in await self.user_service.get_user_ids_for_role(RolesEnum[role]):
                 self._roles[role].add_member(user_id)
 
+    def setup_jobs(self) -> None:
+        if self.job_queue is None:
+            raise Exception('Job queue missing')
+        _roles_sync = self.job_queue.run_repeating(sync_roles, interval=60)
+
     @staticmethod
     async def application_startup(application: "Application") -> None:
         await application.database.create_tables()
         await application.setup_roles()
         application.register_handlers()
+        application.setup_jobs()
 
     @staticmethod
     async def application_shutdown(application: "Application") -> None:
