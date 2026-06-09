@@ -12,3 +12,8 @@ class AppSettings(BaseSettings):
 
     POSTGRES_DSN: Secret[PostgresDsn] = Secret(
         PostgresDsn("postgresql+asyncpg://postgres:1@localhost:5432/ice_cream"))
+
+    ADMIN_INTERFACE_PORT: int = 8001
+    ADMIN_SECRET_KEY: SecretStr = SecretStr("secretkey")
+    ADMIN_LOGIN: SecretStr = SecretStr("admin")
+    ADMIN_PASSWORD: SecretStr = SecretStr("admin")
