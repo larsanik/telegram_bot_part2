@@ -3,7 +3,8 @@ from dataclasses import dataclass
 from telegram.ext import BaseHandler, CommandHandler
 
 from app.core.users.constants import RolesEnum
-from app.handlers.commands import start, waiter_start, stop
+from app.handlers.commands import start, stop
+from app.handlers.waiter_commands import waiter_start
 
 
 @dataclass

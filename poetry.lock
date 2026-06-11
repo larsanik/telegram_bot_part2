@@ -145,6 +145,18 @@ asyncpg = ">=0.31,<0.32"
 typing-extensions = ">=4.13.0,<5.0.0"
 
 [[package]]
+name = "cachetools"
+version = "5.5.2"
+description = "Extensible memoizing collections and decorators"
+optional = false
+python-versions = ">=3.7"
+groups = ["main"]
+files = [
+    {file = "cachetools-5.5.2-py3-none-any.whl", hash = "sha256:d26a22bcc62eb95c3beabd9f1ee5e820d3d2704fe2967cbe350e20c8ffcd3f0a"},
+    {file = "cachetools-5.5.2.tar.gz", hash = "sha256:1a661caa9175d26759571b2e19580f9d6393969e5dfca11fdb1f947a23e640d4"},
+]
+
+[[package]]
 name = "certifi"
 version = "2026.5.20"
 description = "Python package for providing Mozilla's CA Bundle."
@@ -1005,18 +1017,19 @@ files = [
 
 [[package]]
 name = "python-telegram-bot"
-version = "21.11.1"
+version = "21.10"
 description = "We have made you a wrapper you can't refuse"
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "python_telegram_bot-21.11.1-py3-none-any.whl", hash = "sha256:17f933a7a0569f519d9b672e06d71c29ab3688f1ec575ba59a3ca37922481113"},
-    {file = "python_telegram_bot-21.11.1.tar.gz", hash = "sha256:2abda5202f27a838f35e8140e5292af0f4f8fad6c2e5123b2defadd5f4e8ca02"},
+    {file = "python_telegram_bot-21.10-py3-none-any.whl", hash = "sha256:c874d2461d6bfa4b05c314cf6116cf1dafe537689aa8249924dd988603b6ba21"},
+    {file = "python_telegram_bot-21.10.tar.gz", hash = "sha256:40481a8c4814ce2e530a21ce45d389695b0b210c5fb9dc75b8529aba8c9e76f8"},
 ]
 
 [package.dependencies]
 apscheduler = {version = ">=3.10.4,<3.12.0", optional = true, markers = "extra == \"job-queue\""}
+cachetools = {version = ">=5.3.3,<5.6.0", optional = true, markers = "extra == \"callback-data\""}
 httpx = ">=0.27,<1.0"
 
 [package.extras]
@@ -1265,4 +1278,4 @@ email = ["email-validator (>=2.0)"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.13,<4.0"
-content-hash = "80fedb421c0e780bd2ee84bf33d9d28626822a52af22b7855332f1b8fe84032e"
+content-hash = "c15689f004d6b61539ca7618250d98d945fb522328b3e0e51557f6e9a2b6beef"

@@ -70,6 +70,7 @@ def configure_logging():
 
 def create_app(app_settings: AppSettings) -> Application:
     application = (ApplicationBuilder().application_class(Application, kwargs={"app_settings": app_settings})
+                   .arbitrary_callback_data(True)
                    .post_init(Application.application_startup).  # type: ignore[arg-type]
                    post_shutdown(Application.application_shutdown)  # type: ignore[arg-type]
                    .token(app_settings.TELEGRAM_API_KEY.get_secret_value()).build())
