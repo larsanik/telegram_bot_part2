@@ -71,3 +71,24 @@ async def create_order(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
             )
 
 
+async def add_item(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    query = update.callback_query
+    await query.answer()
+    callback_data = query.data
+
+    order_service: OrderService = context.application.order_service
+    product_service: ProductService = context.application.product_service
+
+    order_id, item_id = int(callback_data[1]), int(callback_data[2])
+    products = await product_service.list_products()
+
+    await order_service.add_product_to_order(order_id, item_id)
+    order = await order_service.get_order_by_id(order_id)
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text=format_order_contents(order),
+        reply_markup=build_order_buttons(order_id, products),
+        parse_mode=ParseMode.HTML
+    )
+
+
