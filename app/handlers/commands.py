@@ -5,8 +5,9 @@ from telegram.ext import ContextTypes
 from app.core.orders.constants import OrderStatusEnum
 from app.core.orders.exceptions import ActiveOrderExists
 from app.core.orders.servises import OrderService, ProductService
+from app.core.users.services import UserService
 
-from app.handlers.helpers import build_order_buttons, format_order_contents
+from app.handlers.helpers import build_order_buttons, format_order_contents, format_order_contents_for_waiter
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -91,4 +92,28 @@ async def add_item(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         parse_mode=ParseMode.HTML
     )
 
+async def finish_order(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    query = update.callback_query
+    await query.answer()
+    callback_data = query.data
 
+    order_service: OrderService = context.application.order_service
+    user_service: UserService = context.application.user_service
+
+    order_id = int(callback_data[1])
+    await order_service.send_order_to_waiters(order_id)
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text="Заказ был передан нашим официантам, ожидайте в ближайшее время!"
+    )
+    waiter_users_ids = await user_service.get_waiter_user_ids()
+    order = await order_service.get_order_by_id(order_id)
+
+    for waiter_user_id in waiter_users_ids:
+        await context.bot.send_message(
+            chat_id=waiter_user_id,
+            text=f"Создан новый заказ: {order.id}\n\n "
+            f"{format_order_contents_for_waiter(order)}",
+            reply_markup=InlineKeyboardMarkup([
+                [InlineKeyboardButton("Заказ доставлен",
+                                              callback_data=("waiter_finish_order", order_id))]]))

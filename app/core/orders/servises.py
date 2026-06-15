@@ -20,8 +20,7 @@ class OrderService:
     repository: OrderRepository
 
     async def create_order(self, user_id: int) -> int:
-        if await self.repository.get_active_order_for_user(user_id):
-        # todo было так self.get_active_order_for_user(user_id) по моему это не верно
+        if await self.get_active_order_for_user(user_id):
             raise ActiveOrderExists()
         return await self.repository.create_order(user_id)
 
@@ -39,5 +38,3 @@ class OrderService:
 
     async def mark_order_done(self, order_id: int) -> None:
         return await self.repository.set_order_status(order_id, OrderStatusEnum.done)
-
-
