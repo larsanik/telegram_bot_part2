@@ -4,7 +4,7 @@ from telegram.ext import ContextTypes
 
 from app.core.orders.constants import OrderStatusEnum
 from app.core.orders.exceptions import ActiveOrderExists
-from app.core.orders.servises import OrderService, ProductService
+from app.core.orders.services import OrderService, ProductService
 from app.core.users.services import UserService
 
 from app.handlers.helpers import build_order_buttons, format_order_contents, format_order_contents_for_waiter
@@ -112,7 +112,7 @@ async def finish_order(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     for waiter_user_id in waiter_users_ids:
         await context.bot.send_message(
             chat_id=waiter_user_id,
-            text=f"Создан новый заказ: {order.id}\n\n "
+            text=f"Создан новый заказ: {order_id}\n\n "
             f"{format_order_contents_for_waiter(order)}",
             reply_markup=InlineKeyboardMarkup([
                 [InlineKeyboardButton("Заказ доставлен",

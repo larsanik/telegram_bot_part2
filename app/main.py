@@ -1,5 +1,6 @@
 import logging
-
+from app.core.orders.repositories import ProductRepository, OrderRepository
+from app.core.orders.services import ProductService, OrderService
 from telegram.ext import Application as PTBApplication, ApplicationBuilder
 
 from app.core.users.constants import RolesEnum
@@ -23,7 +24,14 @@ class Application(PTBApplication):
         user_repository = UserRepository(database=self.database)
         self.user_service = UserService(repository=user_repository)
 
-    def register_handlers(self):
+        product_repository = ProductRepository(database=self.database)
+        self.product_service = ProductService(repository=product_repository)
+
+        order_repository = OrderRepository(database=self.database)
+        self.order_service = OrderService(repository=order_repository)
+
+
+    def register_handlers(self) -> None:
         for handler in HANDLERS:
             if handler.role:
                 if self._roles is None:
@@ -32,7 +40,7 @@ class Application(PTBApplication):
             else:
                 self.add_handler(handler.handler)
 
-    async def setup_roles(self):
+    async def setup_roles(self) -> None:
         for role in RolesEnum:
             if role not in self._roles:
                 self._roles.add_role(role)
