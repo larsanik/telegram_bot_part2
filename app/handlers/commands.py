@@ -117,3 +117,18 @@ async def finish_order(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
             reply_markup=InlineKeyboardMarkup([
                 [InlineKeyboardButton("Заказ доставлен",
                                               callback_data=("waiter_finish_order", order_id))]]))
+
+
+async def waiter_finish_order(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    order_service: OrderService = context.application.order_service
+
+    query = update.callback_query
+    await query.answer()
+
+    callback_data = query.data
+    order_id = int(callback_data[1])
+    await order_service.mark_order_done(order_id)
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text="Заказ был переведен в завершенные"
+    )
