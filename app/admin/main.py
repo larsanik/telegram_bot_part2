@@ -12,7 +12,7 @@ class AdminApplication:
     def __init__(self, app_settings: AppSettings):
         self.web_app = Starlette()
         self.database = Database(app_settings.POSTGRES_DSN,
-                                 declarative_base=Base()) # todo поставил Base() вместо Base иначе ругалось
+                                 declarative_base=Base()) # поставил Base() вместо Base иначе ругалось
         self.admin = Admin(self.web_app, self.database.engine,
                            authentication_backend=AdminAuthenticationBackend(settings=app_settings), base_url="/")
         self._register_views()

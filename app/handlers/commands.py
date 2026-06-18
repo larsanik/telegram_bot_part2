@@ -24,16 +24,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             reply_markup=markup
         )
 
-
-async def stop(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:  # todo убрать - это прикол
-    if update.effective_chat and update.effective_user:
-        await context.application.user_service.register_visitor(update.effective_user.id)  # type: ignore[attr-defined]
-        await context.bot.send_message(
-            chat_id=update.effective_chat.id,
-            text="Добро отжаловать! =/)"
-        )
-
-
 async def create_order(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     query = update.callback_query
     await query.answer()
@@ -66,8 +56,6 @@ async def create_order(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
                 chat_id=update.effective_chat.id,
                 text=format_order_contents(active_order),
                 reply_markup=build_order_buttons(active_order.id, items),
-                #                                        ^^^^^^^^^^^^^^^
-                # todo Expected type 'int', got 'Mapped[int]' instead, но говорят проблем не будет =о)
                 parse_mode=ParseMode.HTML
             )
 
